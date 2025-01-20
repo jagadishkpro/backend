@@ -15,12 +15,12 @@ app.use(cors());
 app.post("/auth", async (req, res) => {
   try {
     // Define the payload for the authentication API
-    const authPayload = { Grant_Type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' };
+    const authPayload = { grant_type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' };
 
     // Make the POST request to the authentication API
     const authResponse = await axios.post("https://auth.servicetitan.io/connect/token", authPayload, {
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
       },
     });
 
