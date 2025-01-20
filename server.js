@@ -38,4 +38,26 @@ app.get("/data", async (req, res) => {
     const token = req.headers.authorization;
 
     // Make the GET request to the data API
-    const data
+    const dataResponse = await axios.get(`https://your-data-api-url.com?technicianId=${technicianId}`, {
+      headers: {
+        Authorization: token, // Send the token as a Bearer token
+      },
+    });
+
+    // Send back the data response to the client
+    res.json(dataResponse.data);
+  } catch (error) {
+    console.error("Error fetching data:", error.message);
+    res.status(error.response?.status || 500).json({ error: "Data retrieval failed." });
+  }
+});
+
+// Health check endpoint
+app.get("/", (req, res) => {
+  res.send("Proxy server is running!");
+});
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
