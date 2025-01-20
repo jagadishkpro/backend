@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 
 app.post('/auth', async (req, res) => {
     try {
-        const { username, password } = req.body;
+       
         const response = await fetch('https://auth.servicetitan.io/connect/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
