@@ -1,42 +1,41 @@
-const express = require('express');
-const fetch = require('node-fetch');
-const cors = require('cors');
+const express = require("express");
+const axios = require("axios");
 
 const app = express();
-app.use(cors());
-app.use(express.json());
-
 const PORT = process.env.PORT || 3000;
 
-app.post('/auth', async (req, res) => {
-    try {
-       
-        const response = await fetch('https://auth.servicetitan.io/connect/token', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ Grant_Type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' }),
-        });
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error in /auth:', error);
-        res.status(500).json({ error: 'Failed to fetch auth key' });
-    }
+// Middleware for parsing JSON request bodies
+app.use(express.json());
+
+// Proxy POST endpoint for authentication
+app.post("/auth", async (req, res) => {
+  try {
+    // Define the payload for the authentication API
+    const authPayload = { Grant_Type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' };
+
+    // Make the POST request to the authentication API
+    const authResponse = await axios.post("https://auth.servicetitan.io/connect/token", authPayload, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    // Send back the authentication response to the client
+    res.json(authResponse.data);
+  } catch (error) {
+    console.error("Error during authentication:", error.message);
+    res.status(error.response?.status || 500).json({ error: "Authentication failed." });
+  }
 });
 
-app.get('/technicians', async (req, res) => {
-    try {
-        const authKey = req.headers['authorization'];
-        const response = await fetch('https://api.servicetitan.com/technicians', {
-            method: 'GET',
-            headers: { Authorization: authKey },
-        });
-        const data = await response.json();
-        res.json(data);
-    } catch (error) {
-        console.error('Error in /technicians:', error);
-        res.status(500).json({ error: 'Failed to fetch technicians' });
-    }
-});
+// Proxy GET endpoint for fetching data
+app.get("/data", async (req, res) => {
+  try {
+    // Extract query parameters from the request
+    const { technicianId } = req.query;
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+    // Extract the Authorization token from the headers
+    const token = req.headers.authorization;
+
+    // Make the GET request to the data API
+    const data
