@@ -36,15 +36,17 @@ app.post("/auth", async (req, res) => {
 app.get("/data", async (req, res) => {
   try {
     // Extract query parameters from the request
-    const { technicianId } = req.query;
+    
 
     // Extract the Authorization token from the headers
     const token = req.headers.authorization;
+	const stkey = req.headers.stappkey;
 
     // Make the GET request to the data API
-    const dataResponse = await axios.get(`https://your-data-api-url.com?technicianId=${technicianId}`, {
+    const dataResponse = await axios.get('https://api.servicetitan.io/dispatch/v2/tenant/1721346453/zones?page=1&pageSize=300&includeTotal=true', {
       headers: {
         Authorization: token, // Send the token as a Bearer token
+		'st-app-key': stkey
       },
     });
 
