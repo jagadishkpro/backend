@@ -1,11 +1,15 @@
 const express = require("express");
 const axios = require("axios");
+const cors = require("cors");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware for parsing JSON request bodies
 app.use(express.json());
+
+// Enable CORS
+app.use(cors());
 
 // Proxy POST endpoint for authentication
 app.post("/auth", async (req, res) => {
