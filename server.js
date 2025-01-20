@@ -11,10 +11,10 @@ const PORT = process.env.PORT || 3000;
 app.post('/auth', async (req, res) => {
     try {
         const { username, password } = req.body;
-        const response = await fetch('https://api.servicetitan.com/auth', {
+        const response = await fetch('https://auth.servicetitan.io/connect/token', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password }),
+            body: JSON.stringify({ Grant_Type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' }),
         });
         const data = await response.json();
         res.json(data);
