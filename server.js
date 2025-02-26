@@ -131,10 +131,10 @@ async function getFileId(accessToken, siteId, driveId) {
             throw new Error("Unexpected API response: Missing 'value' field.");
         }
 
-        const file = response.data.value.find(item => item.name === fileName);
+        const file = response.data.value.find(item => item.name === FILE_NAME);
 
         if (!file) {
-            throw new Error(`File '${fileName}' not found in SharePoint.`);
+            throw new Error(`File '${FILE_NAME}' not found in SharePoint.`);
         }
 
         console.log("File ID Found:", file.id); // Debugging: Log the File ID
