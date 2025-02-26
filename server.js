@@ -75,7 +75,8 @@ async function getAccessToken() {
                 client_secret: CLIENT_SECRET,
                 scope: "https://graph.microsoft.com/.default",
                 grant_type: "client_credentials",
-            })
+            }),
+  { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
         );
         return response.data.access_token;
     } catch (error) {
