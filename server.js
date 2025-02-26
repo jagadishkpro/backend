@@ -117,7 +117,7 @@ async function getDriveId(accessToken, siteId) {
 async function getFileId(accessToken, siteId, driveId) {
     try {
         const response = await axios.get(
-            `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/root/children`,
+            `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/root:/Manager Drive/Home Warranties/Choice`,
             { headers: { Authorization: `Bearer ${accessToken}` } }
         );
 
