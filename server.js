@@ -61,7 +61,7 @@ app.get("/data", async (req, res) => {
 });
 
 const CLIENT_ID = "a92ed195-5eaf-4711-b991-4fba4e3090e1";
-const CLIENT_SECRET = "GXt8Q~mehDmsnEkyGfHcw2hecx6QFLQYrZr~btZ";
+const CLIENT_SECRET = "flB8Q~DqNmaBuHF41frS5.ORB.egg3wJ_r7zDbb8";
 const TENANT_ID = "c495e6d6-65d0-4481-b27e-2b9364d79481";
 const SHAREPOINT_SITE = "number1garage.sharepoint.com/sites/ManagerTeam";
 const FILE_NAME = "Choice.xlsx";
