@@ -116,13 +116,28 @@ async function getDriveId(accessToken, siteId) {
 // 🔹 Get File ID
 async function getFileId(accessToken, siteId, driveId) {
     try {
-        const response = await axios.get(
-            `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/root:/Manager Drive/Home Warranties/Choice`,
-            { headers: { Authorization: `Bearer ${accessToken}` } }
-        );
+        const filePath = "Manager Drive/Home Warranties/Choice"; // Adjust if necessary
+        const apiUrl = `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/root:/${filePath}:/children`;
 
-        const file = response.data.value.find(file => file.name === FILE_NAME);
-        if (!file) throw new Error("File not found in SharePoint");
+        console.log("Fetching File ID from:", apiUrl); // Debugging: Log the request URL
+
+        const response = await axios.get(apiUrl, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        console.log("Drive API Response:", response.data); // Debugging: Log the full response
+
+        if (!response.data || !response.data.value) {
+            throw new Error("Unexpected API response: Missing 'value' field.");
+        }
+
+        const file = response.data.value.find(item => item.name === fileName);
+
+        if (!file) {
+            throw new Error(`File '${fileName}' not found in SharePoint.`);
+        }
+
+        console.log("File ID Found:", file.id); // Debugging: Log the File ID
         return file.id;
     } catch (error) {
         console.error("Error getting File ID:", error.response?.data || error.message);
