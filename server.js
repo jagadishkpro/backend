@@ -9,26 +9,25 @@ const XLSX = require("xlsx");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware for parsing JSON request bodies
+
 app.use(express.json());
 
-// Enable CORS
+
 app.use(cors());
 
-// Proxy POST endpoint for authentication
+
 app.post("/auth", async (req, res) => {
   try {
-    // Define the payload for the authentication API
+    
     const authPayload = { grant_type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' };
 
-    // Make the POST request to the authentication API
+    
     const authResponse = await axios.post("https://auth.servicetitan.io/connect/token", authPayload, {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     });
 
-    // Send back the authentication response to the client
     res.json(authResponse.data);
   } catch (error) {
     console.error("Error during authentication:", error.message);
@@ -36,25 +35,25 @@ app.post("/auth", async (req, res) => {
   }
 });
 
-// Proxy GET endpoint for fetching data
+
 app.get("/data", async (req, res) => {
   try {
-    // Extract query parameters from the request
+    
     
 
-    // Extract the Authorization token from the headers
+    
     const token = req.headers.authorization;
 	const stkey = req.headers.stappkey;
 
-    // Make the GET request to the data API
+  
     const dataResponse = await axios.get('https://api.servicetitan.io/dispatch/v2/tenant/1721346453/zones?page=1&pageSize=300&includeTotal=true', {
       headers: {
-        Authorization: token, // Send the token as a Bearer token
+        Authorization: token, 
 		'st-app-key': stkey
       },
     });
 
-    // Send back the data response to the client
+  
     res.json(dataResponse.data);
   } catch (error) {
     console.error("Error fetching data:", error.message);
@@ -109,7 +108,7 @@ async function getDriveId(accessToken, siteId) {
             `https://graph.microsoft.com/v1.0/sites/${siteId}/drives`,
             { headers: { Authorization: `Bearer ${accessToken}` } }
         );
-        return response.data.value[0].id; // First drive (usually "Documents")
+        return response.data.value[0].id; 
     } catch (error) {
         console.error("Error getting Drive ID:", error.response?.data || error.message);
         throw new Error("Failed to get Drive ID");
@@ -122,13 +121,13 @@ async function getFileId(accessToken, siteId, driveId) {
         const filePath = "Manager Drive/Home Warranties/Choice"; // Adjust if necessary
         const apiUrl = `https://graph.microsoft.com/v1.0/sites/${siteId}/drives/${driveId}/root:/${filePath}:/children`;
 
-        console.log("Fetching File ID from:", apiUrl); // Debugging: Log the request URL
+        console.log("Fetching File ID from:", apiUrl); 
 
         const response = await axios.get(apiUrl, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 
-        console.log("Drive API Response:", response.data); // Debugging: Log the full response
+        console.log("Drive API Response:", response.data); 
 
         if (!response.data || !response.data.value) {
             throw new Error("Unexpected API response: Missing 'value' field.");
@@ -140,7 +139,7 @@ async function getFileId(accessToken, siteId, driveId) {
             throw new Error(`File '${FILE_NAME}' not found in SharePoint.`);
         }
 
-        console.log("File ID Found:", file.id); // Debugging: Log the File ID
+        console.log("File ID Found:", file.id); 
         return file.id;
     } catch (error) {
         console.error("Error getting File ID:", error.response?.data || error.message);
@@ -170,16 +169,16 @@ async function fetchExcelFile() {
     }
 }
 
-// 🔹 Convert Excel to JSON
+
 function parseExcelData(buffer) {
     const workbook = XLSX.read(buffer, { type: "buffer" });
-    const sheetName = workbook.SheetNames[0]; // Read the first sheet
+    const sheetName = workbook.SheetNames[0]; 
     const sheet = workbook.Sheets[sheetName];
     const jsonData = XLSX.utils.sheet_to_json(sheet);
     return jsonData;
 }
 
-// 🔹 API Endpoint to Get Excel Data
+
 app.get("/get-excel-data", async (req, res) => {
     try {
         const fileBuffer = await fetchExcelFile();
@@ -191,12 +190,12 @@ app.get("/get-excel-data", async (req, res) => {
 });
 
 
-// Health check endpoint
+
 app.get("/", (req, res) => {
   res.send("Proxy server is running!");
 });
 
-// Start the server
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
