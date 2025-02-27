@@ -15,11 +15,51 @@ app.use(express.json());
 
 app.use(cors());
 
+const CLIENT_ID_SS = process.env.CLIENT_ID_SS;
+const CLIENT_SECRET_SS = process.env.CLIENT_SECRET_SS;
+const ST_KEY_SS = process.env.ST_KEY_SS;
+
+app.get("/fetch-data", async (req, res) => {
+  try {
+    // Step 1: Authenticate and get the token
+    const authPayload = new URLSearchParams({
+      grant_type: "client_credentials",
+      client_id: CLIENT_ID_SS,
+      client_secret: CLIENT_SECRET_SS,
+    });
+
+    const authResponse = await axios.post(
+      "https://auth.servicetitan.io/connect/token",
+      authPayload.toString(),
+      { headers: { "Content-Type": "application/x-www-form-urlencoded" } }
+    );
+
+    const accessToken = `Bearer ${authResponse.data.access_token}`;
+
+    // Step 2: Use the token to fetch data
+    const dataResponse = await axios.get(
+      'https://api.servicetitan.io/dispatch/v2/tenant/1721346453/zones?page=1&pageSize=300&includeTotal=true',
+      {
+        headers: {
+          Authorization: accessToken,
+          "st-app-key": ST_KEY_SS,
+        },
+      }
+    );
+
+    res.json(dataResponse.data);
+  } catch (error) {
+    console.error("Error fetching data:", error.response?.data || error.message);
+    res.status(error.response?.status || 500).json({ error: "Request failed." });
+  }
+});
+
+
 
 app.post("/auth", async (req, res) => {
   try {
     
-    const authPayload = { grant_type: 'client_credentials' ,client_id:'cid.9fkiaw98wjt520ej5yvw2bmzd', client_secret: 'cs1.vb2ryhejldmqbutixjbimvtac09iq0okggm076e2wpli8p87n8' };
+    const authPayload = { grant_type: 'client_credentials' ,client_id: CLIENT_ID_SS, client_secret: CLIENT_SECRET_SS };
 
     
     const authResponse = await axios.post("https://auth.servicetitan.io/connect/token", authPayload, {
@@ -67,11 +107,7 @@ const TENANT_ID = process.env.TENANT_ID;
 const SHAREPOINT_SITE = process.env.SHAREPOINT_SITE;
 const FILE_NAME = process.env.FILE_NAME;
 
-console.log("cId:", CLIENT_ID)
-console.log("cv:", CLIENT_SECRET)
-console.log("tid:", TENANT_ID)
-console.log("ss:", SHAREPOINT_SITE)
-console.log("fn:", FILE_NAME)
+
 
 async function getAccessToken() {
     try {
