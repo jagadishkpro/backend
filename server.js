@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config({ path: "/etc/secrets/.env" });
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
@@ -15,7 +15,6 @@ app.use(express.json());
 
 app.use(cors());
 
-console.log("All Environment Variables:", process.env);
 
 app.post("/auth", async (req, res) => {
   try {
