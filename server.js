@@ -21,7 +21,6 @@ const ST_KEY_SS = process.env.ST_KEY_SS;
 
 app.get("/fetch-data", async (req, res) => {
   try {
-    // Step 1: Authenticate and get the token
     const authPayload = new URLSearchParams({
       grant_type: "client_credentials",
       client_id: CLIENT_ID_SS,
@@ -36,7 +35,6 @@ app.get("/fetch-data", async (req, res) => {
 
     const accessToken = `Bearer ${authResponse.data.access_token}`;
 
-    // Step 2: Use the token to fetch data
     const dataResponse = await axios.get(
       'https://api.servicetitan.io/dispatch/v2/tenant/1721346453/zones?page=1&pageSize=300&includeTotal=true',
       {
@@ -56,50 +54,7 @@ app.get("/fetch-data", async (req, res) => {
 
 
 
-app.post("/auth", async (req, res) => {
-  try {
-    
-    const authPayload = { grant_type: 'client_credentials' ,client_id: CLIENT_ID_SS, client_secret: CLIENT_SECRET_SS };
 
-    
-    const authResponse = await axios.post("https://auth.servicetitan.io/connect/token", authPayload, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
-
-    res.json(authResponse.data);
-  } catch (error) {
-    console.error("Error during authentication:", error.message);
-    res.status(error.response?.status || 500).json({ error: "Authentication failed." });
-  }
-});
-
-
-app.get("/data", async (req, res) => {
-  try {
-    
-    
-
-    
-    const token = req.headers.authorization;
-	const stkey = req.headers.stappkey;
-
-  
-    const dataResponse = await axios.get('https://api.servicetitan.io/dispatch/v2/tenant/1721346453/zones?page=1&pageSize=300&includeTotal=true', {
-      headers: {
-        Authorization: token, 
-		'st-app-key': stkey
-      },
-    });
-
-  
-    res.json(dataResponse.data);
-  } catch (error) {
-    console.error("Error fetching data:", error.message);
-    res.status(error.response?.status || 500).json({ error: "Data retrieval failed." });
-  }
-});
 
 const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
