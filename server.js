@@ -83,7 +83,6 @@ async function getAccessToken() {
     }
 }
 
-// 🔹 Get SharePoint Site ID
 async function getSiteId(accessToken) {
     try {
         const response = await axios.get(
@@ -97,7 +96,6 @@ async function getSiteId(accessToken) {
     }
 }
 
-// 🔹 Get Drive ID (Document Library)
 async function getDriveId(accessToken, siteId) {
     try {
         const response = await axios.get(
@@ -111,7 +109,6 @@ async function getDriveId(accessToken, siteId) {
     }
 }
 
-// 🔹 Get File ID
 async function getFileId(accessToken, siteId, driveId) {
     try {
         const filePath = "Manager Drive/Home Warranties/Choice"; // Adjust if necessary
@@ -143,7 +140,6 @@ async function getFileId(accessToken, siteId, driveId) {
     }
 }
 
-// 🔹 Fetch Excel File
 async function fetchExcelFile() {
     try {
         const accessToken = await getAccessToken();
