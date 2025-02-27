@@ -1,8 +1,10 @@
+require('dotenv').config();
 const express = require("express");
 const axios = require("axios");
 const cors = require("cors");
 const fs = require("fs");
 const XLSX = require("xlsx");
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -60,11 +62,12 @@ app.get("/data", async (req, res) => {
   }
 });
 
-const CLIENT_ID = "a92ed195-5eaf-4711-b991-4fba4e3090e1";
-const CLIENT_SECRET = "flB8Q~DqNmaBuHF41frS5.ORB.egg3wJ_r7zDbb8";
-const TENANT_ID = "c495e6d6-65d0-4481-b27e-2b9364d79481";
-const SHAREPOINT_SITE = "number1garage.sharepoint.com:/sites/ManagerTeam";
-const FILE_NAME = "Choice.xlsx";
+const CLIENT_ID = process.env.CLIENT_ID;
+const CLIENT_SECRET = process.env.CLIENT_SECRET;
+const TENANT_ID = process.env.TENANT_ID;
+const SHAREPOINT_SITE = process.env.SHAREPOINT_SITE;
+const FILE_NAME = process.env.FILE_NAME;
+
 
 async function getAccessToken() {
     try {
