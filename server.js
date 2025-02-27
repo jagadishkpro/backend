@@ -67,6 +67,11 @@ const TENANT_ID = process.env.TENANT_ID;
 const SHAREPOINT_SITE = process.env.SHAREPOINT_SITE;
 const FILE_NAME = process.env.FILE_NAME;
 
+console.log("cId:", CLIENT_ID)
+console.log("cv:", CLIENT_SECRET)
+console.log("tid:", TENANT_ID)
+console.log("ss:", SHAREPOINT_SITE)
+console.log("fn:", FILE_NAME)
 
 async function getAccessToken() {
     try {
