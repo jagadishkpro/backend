@@ -15,6 +15,7 @@ app.use(express.json());
 
 app.use(cors());
 
+console.log("All Environment Variables:", process.env);
 
 app.post("/auth", async (req, res) => {
   try {
